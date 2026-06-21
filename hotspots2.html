@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_d88f7148beeb9650a9b1c330a7d6bfcf {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_d88f7148beeb9650a9b1c330a7d6bfcf" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_d88f7148beeb9650a9b1c330a7d6bfcf = L.map(
+                "map_d88f7148beeb9650a9b1c330a7d6bfcf",
+                {
+                    center: [12.980801878709853, 77.60051221133006],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 11,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_3198fcf4310ef9798c63d3c34768146e = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_3198fcf4310ef9798c63d3c34768146e.addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var marker_b7b05497a3aa4235ef677f61295d06d5 = L.marker(
+                [13.116236744180506, 77.6230173375298],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_12fcb82567a69a92e3feba8fee826c04 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7fb28087da5c7d5554598967a7c59377 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1b06065722212cfcf2478cfb5a5530ae = $(`<div id="html_1b06065722212cfcf2478cfb5a5530ae" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_7fb28087da5c7d5554598967a7c59377.setContent(html_1b06065722212cfcf2478cfb5a5530ae);
+            
+        
+
+        marker_b7b05497a3aa4235ef677f61295d06d5.bindPopup(popup_7fb28087da5c7d5554598967a7c59377)
+        ;
+
+        
+    
+    
+                marker_b7b05497a3aa4235ef677f61295d06d5.setIcon(icon_12fcb82567a69a92e3feba8fee826c04);
+            
+    
+            var marker_d98e2a8ca9ca0797d5b531e27363904e = L.marker(
+                [12.98218292282659, 77.60803287936994],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_9ebb365fab6bff3b16569d75bec7803d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_659f21134cd24276c7774fa90d0d4346 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b0413eb7e8085e537fd59ed9dbefa1dd = $(`<div id="html_b0413eb7e8085e537fd59ed9dbefa1dd" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_659f21134cd24276c7774fa90d0d4346.setContent(html_b0413eb7e8085e537fd59ed9dbefa1dd);
+            
+        
+
+        marker_d98e2a8ca9ca0797d5b531e27363904e.bindPopup(popup_659f21134cd24276c7774fa90d0d4346)
+        ;
+
+        
+    
+    
+                marker_d98e2a8ca9ca0797d5b531e27363904e.setIcon(icon_9ebb365fab6bff3b16569d75bec7803d);
+            
+    
+            var marker_1813ac4bd5336fab16129a32614fa633 = L.marker(
+                [12.93444934383094, 77.69057974959034],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_ab43f5cdaa45af80e6d8b274445d4c19 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_49b10136ec33219580d72506a8808a7a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_435c5c17098464982941646f417f742f = $(`<div id="html_435c5c17098464982941646f417f742f" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_49b10136ec33219580d72506a8808a7a.setContent(html_435c5c17098464982941646f417f742f);
+            
+        
+
+        marker_1813ac4bd5336fab16129a32614fa633.bindPopup(popup_49b10136ec33219580d72506a8808a7a)
+        ;
+
+        
+    
+    
+                marker_1813ac4bd5336fab16129a32614fa633.setIcon(icon_ab43f5cdaa45af80e6d8b274445d4c19);
+            
+    
+            var marker_48fa5fb2ab7fbcb3078de3e3f7198cec = L.marker(
+                [12.909078647207606, 77.59756139889083],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_5fbe9b20d8f99f6fdc53ee90d925342f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_02f64bb23d81f54e7d257316820b195c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0c6e16cc400ebb9fc37b761c0abcdc52 = $(`<div id="html_0c6e16cc400ebb9fc37b761c0abcdc52" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_02f64bb23d81f54e7d257316820b195c.setContent(html_0c6e16cc400ebb9fc37b761c0abcdc52);
+            
+        
+
+        marker_48fa5fb2ab7fbcb3078de3e3f7198cec.bindPopup(popup_02f64bb23d81f54e7d257316820b195c)
+        ;
+
+        
+    
+    
+                marker_48fa5fb2ab7fbcb3078de3e3f7198cec.setIcon(icon_5fbe9b20d8f99f6fdc53ee90d925342f);
+            
+    
+            var marker_0c184ad36401fb5ee2fe816167e62edd = L.marker(
+                [12.988494804844278, 77.55228217322664],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_20cb026659246c5fb80e0b3e0c0941a0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4333e44edea13dc67ea203a68532db93 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f7839434f5256c783720aca80be532a0 = $(`<div id="html_f7839434f5256c783720aca80be532a0" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_4333e44edea13dc67ea203a68532db93.setContent(html_f7839434f5256c783720aca80be532a0);
+            
+        
+
+        marker_0c184ad36401fb5ee2fe816167e62edd.bindPopup(popup_4333e44edea13dc67ea203a68532db93)
+        ;
+
+        
+    
+    
+                marker_0c184ad36401fb5ee2fe816167e62edd.setIcon(icon_20cb026659246c5fb80e0b3e0c0941a0);
+            
+    
+            var marker_d23b1205f463746db944a8e62298779b = L.marker(
+                [13.188098638111914, 77.67612379111097],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_d3b8305cb734627b58739e423b90865e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_400a191f8f60680ff86b405f8790fb36 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d596e23b206bccd6f59ef5bb04145ea0 = $(`<div id="html_d596e23b206bccd6f59ef5bb04145ea0" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_400a191f8f60680ff86b405f8790fb36.setContent(html_d596e23b206bccd6f59ef5bb04145ea0);
+            
+        
+
+        marker_d23b1205f463746db944a8e62298779b.bindPopup(popup_400a191f8f60680ff86b405f8790fb36)
+        ;
+
+        
+    
+    
+                marker_d23b1205f463746db944a8e62298779b.setIcon(icon_d3b8305cb734627b58739e423b90865e);
+            
+    
+            var marker_c0090e0f6ca5e074a7db8f8ea2127909 = L.marker(
+                [12.962343647521786, 77.71194183074718],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_52e4e87adebba67899b5d8b1389c609b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_df0f81fd90464619f3509cdc8e90f748 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c895a8e23f15d36a0e6501ed2c6f5c8e = $(`<div id="html_c895a8e23f15d36a0e6501ed2c6f5c8e" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_df0f81fd90464619f3509cdc8e90f748.setContent(html_c895a8e23f15d36a0e6501ed2c6f5c8e);
+            
+        
+
+        marker_c0090e0f6ca5e074a7db8f8ea2127909.bindPopup(popup_df0f81fd90464619f3509cdc8e90f748)
+        ;
+
+        
+    
+    
+                marker_c0090e0f6ca5e074a7db8f8ea2127909.setIcon(icon_52e4e87adebba67899b5d8b1389c609b);
+            
+    
+            var marker_f6af140db0a6552ffe014aa09c20683c = L.marker(
+                [12.963516200603568, 77.57969263259444],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_13991cd8138f90d345d5534ce97e1ae1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6e15d1fd39a10fcb87c0bc63573b8440 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_31b8d222f4d44097d1815b265be10d66 = $(`<div id="html_31b8d222f4d44097d1815b265be10d66" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_6e15d1fd39a10fcb87c0bc63573b8440.setContent(html_31b8d222f4d44097d1815b265be10d66);
+            
+        
+
+        marker_f6af140db0a6552ffe014aa09c20683c.bindPopup(popup_6e15d1fd39a10fcb87c0bc63573b8440)
+        ;
+
+        
+    
+    
+                marker_f6af140db0a6552ffe014aa09c20683c.setIcon(icon_13991cd8138f90d345d5534ce97e1ae1);
+            
+    
+            var marker_01d3df8eb546b9c0038c399f64e814da = L.marker(
+                [13.073774677008245, 77.58894643434363],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_65e22728d6b38de476b2878a578324f2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7be447fded870ffcd6716dc7cdc06df1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_41e74bdfa66b7e1b5740360973a4fc07 = $(`<div id="html_41e74bdfa66b7e1b5740360973a4fc07" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_7be447fded870ffcd6716dc7cdc06df1.setContent(html_41e74bdfa66b7e1b5740360973a4fc07);
+            
+        
+
+        marker_01d3df8eb546b9c0038c399f64e814da.bindPopup(popup_7be447fded870ffcd6716dc7cdc06df1)
+        ;
+
+        
+    
+    
+                marker_01d3df8eb546b9c0038c399f64e814da.setIcon(icon_65e22728d6b38de476b2878a578324f2);
+            
+    
+            var marker_db303afa9f4fd2efc3df421e4e6abdc8 = L.marker(
+                [12.997870510342887, 77.66975092580759],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_7251b1c0b78d20c009da89e1726bcf39 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f6827766455a7715ad95b70f5917d7a6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_67be23befc5a3a1dd73ac3e2fbae142d = $(`<div id="html_67be23befc5a3a1dd73ac3e2fbae142d" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_f6827766455a7715ad95b70f5917d7a6.setContent(html_67be23befc5a3a1dd73ac3e2fbae142d);
+            
+        
+
+        marker_db303afa9f4fd2efc3df421e4e6abdc8.bindPopup(popup_f6827766455a7715ad95b70f5917d7a6)
+        ;
+
+        
+    
+    
+                marker_db303afa9f4fd2efc3df421e4e6abdc8.setIcon(icon_7251b1c0b78d20c009da89e1726bcf39);
+            
+    
+            var marker_4845df9c2df9169d8484049428d29316 = L.marker(
+                [12.832459736379846, 77.68189858486146],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_4fc2a6d2dc8521ef4ddf5683564ec177 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a23e9ba5df239906dede5b51e6e6d2f1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6c547c532d99f86b8f099a319911e0fc = $(`<div id="html_6c547c532d99f86b8f099a319911e0fc" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_a23e9ba5df239906dede5b51e6e6d2f1.setContent(html_6c547c532d99f86b8f099a319911e0fc);
+            
+        
+
+        marker_4845df9c2df9169d8484049428d29316.bindPopup(popup_a23e9ba5df239906dede5b51e6e6d2f1)
+        ;
+
+        
+    
+    
+                marker_4845df9c2df9169d8484049428d29316.setIcon(icon_4fc2a6d2dc8521ef4ddf5683564ec177);
+            
+    
+            var marker_4b640d0d551b71225552f2d471d3f975 = L.marker(
+                [12.941377766596588, 77.53145760182758],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_eb6310af80cb5e5c2116e5d41333c4d4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f410a657a10fd1f8aabad050e74ca91f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d4f4d21b9d6d925bf2da07331e0ccac8 = $(`<div id="html_d4f4d21b9d6d925bf2da07331e0ccac8" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_f410a657a10fd1f8aabad050e74ca91f.setContent(html_d4f4d21b9d6d925bf2da07331e0ccac8);
+            
+        
+
+        marker_4b640d0d551b71225552f2d471d3f975.bindPopup(popup_f410a657a10fd1f8aabad050e74ca91f)
+        ;
+
+        
+    
+    
+                marker_4b640d0d551b71225552f2d471d3f975.setIcon(icon_eb6310af80cb5e5c2116e5d41333c4d4);
+            
+    
+            var marker_3d2805c212b65f8bd411e46306c2133a = L.marker(
+                [12.880313099586877, 77.64636580613352],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_34ce455c37cfb8601d0c573645307dc2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_13025e1f39d283b530c658b304dd4ca5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5e5ec33d8feff3042f2ef70ae38c08d4 = $(`<div id="html_5e5ec33d8feff3042f2ef70ae38c08d4" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_13025e1f39d283b530c658b304dd4ca5.setContent(html_5e5ec33d8feff3042f2ef70ae38c08d4);
+            
+        
+
+        marker_3d2805c212b65f8bd411e46306c2133a.bindPopup(popup_13025e1f39d283b530c658b304dd4ca5)
+        ;
+
+        
+    
+    
+                marker_3d2805c212b65f8bd411e46306c2133a.setIcon(icon_34ce455c37cfb8601d0c573645307dc2);
+            
+    
+            var marker_822f9c949adf749470c83058f006d196 = L.marker(
+                [13.004661556740768, 77.69437852049326],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_979fd68873a27d2cecf4244a35a6173d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1664b2496a690e0968304760644da15f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7819c9962096427b585fc5fefed13d5f = $(`<div id="html_7819c9962096427b585fc5fefed13d5f" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_1664b2496a690e0968304760644da15f.setContent(html_7819c9962096427b585fc5fefed13d5f);
+            
+        
+
+        marker_822f9c949adf749470c83058f006d196.bindPopup(popup_1664b2496a690e0968304760644da15f)
+        ;
+
+        
+    
+    
+                marker_822f9c949adf749470c83058f006d196.setIcon(icon_979fd68873a27d2cecf4244a35a6173d);
+            
+    
+            var marker_16ff0d9db588350d9ef7c5594e7a38ba = L.marker(
+                [13.035401522419953, 77.58257699089697],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_3641fa0897bc4957bb714a35d3325d04 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ccd07bd8e88649a328e0106424a547d7 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f366b064a3f905f9001433cb96a01805 = $(`<div id="html_f366b064a3f905f9001433cb96a01805" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_ccd07bd8e88649a328e0106424a547d7.setContent(html_f366b064a3f905f9001433cb96a01805);
+            
+        
+
+        marker_16ff0d9db588350d9ef7c5594e7a38ba.bindPopup(popup_ccd07bd8e88649a328e0106424a547d7)
+        ;
+
+        
+    
+    
+                marker_16ff0d9db588350d9ef7c5594e7a38ba.setIcon(icon_3641fa0897bc4957bb714a35d3325d04);
+            
+    
+            var marker_757239d8bfbf72d9284c94c6fa83a456 = L.marker(
+                [13.042961140739434, 77.51969077038453],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_98beeef70b01fe46dcbbcddfda121187 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f5ce7b7527df12b91dcb9e6939e69251 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_97bee15f0e7cd4d2449bff06f72d1669 = $(`<div id="html_97bee15f0e7cd4d2449bff06f72d1669" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_f5ce7b7527df12b91dcb9e6939e69251.setContent(html_97bee15f0e7cd4d2449bff06f72d1669);
+            
+        
+
+        marker_757239d8bfbf72d9284c94c6fa83a456.bindPopup(popup_f5ce7b7527df12b91dcb9e6939e69251)
+        ;
+
+        
+    
+    
+                marker_757239d8bfbf72d9284c94c6fa83a456.setIcon(icon_98beeef70b01fe46dcbbcddfda121187);
+            
+    
+            var marker_026aa6d83e19a9622981b159f234be1f = L.marker(
+                [12.97729883628458, 77.57763345594287],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_78949770c9d36230113e172cd32216c9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_99c386986e0f04d031fa04f41caf1252 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4a8cb1e2f334bbe08a9d0f3d64017170 = $(`<div id="html_4a8cb1e2f334bbe08a9d0f3d64017170" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_99c386986e0f04d031fa04f41caf1252.setContent(html_4a8cb1e2f334bbe08a9d0f3d64017170);
+            
+        
+
+        marker_026aa6d83e19a9622981b159f234be1f.bindPopup(popup_99c386986e0f04d031fa04f41caf1252)
+        ;
+
+        
+    
+    
+                marker_026aa6d83e19a9622981b159f234be1f.setIcon(icon_78949770c9d36230113e172cd32216c9);
+            
+    
+            var marker_e4c1821de7e081f1099a870c34e8d0d6 = L.marker(
+                [12.90915364029748, 77.63547737051793],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_12a28efadb8c151608a4c3428e57f09f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5cb8407c8d02af21777d44e4b551dbc1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_238a1017d3fed51f9f8b85e05eb2682f = $(`<div id="html_238a1017d3fed51f9f8b85e05eb2682f" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_5cb8407c8d02af21777d44e4b551dbc1.setContent(html_238a1017d3fed51f9f8b85e05eb2682f);
+            
+        
+
+        marker_e4c1821de7e081f1099a870c34e8d0d6.bindPopup(popup_5cb8407c8d02af21777d44e4b551dbc1)
+        ;
+
+        
+    
+    
+                marker_e4c1821de7e081f1099a870c34e8d0d6.setIcon(icon_12a28efadb8c151608a4c3428e57f09f);
+            
+    
+            var marker_614f94afb24611187e0efe4d4ec73162 = L.marker(
+                [12.968126424532327, 77.64653014247969],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_ccf3f5c93ba0ac05f9fe6843c4e87db2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ffb9ffe20856b4a0db3143052de08a7a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1bed42a583b59a2e882e27e3194faaa6 = $(`<div id="html_1bed42a583b59a2e882e27e3194faaa6" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_ffb9ffe20856b4a0db3143052de08a7a.setContent(html_1bed42a583b59a2e882e27e3194faaa6);
+            
+        
+
+        marker_614f94afb24611187e0efe4d4ec73162.bindPopup(popup_ffb9ffe20856b4a0db3143052de08a7a)
+        ;
+
+        
+    
+    
+                marker_614f94afb24611187e0efe4d4ec73162.setIcon(icon_ccf3f5c93ba0ac05f9fe6843c4e87db2);
+            
+    
+            var marker_36e4b20cf9fa5fd13621656e9304d518 = L.marker(
+                [12.934205020254694, 77.57816669762325],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_dd6c567cd9491fff056178203a7c0f8e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_274a00088f126a594ef1c34e43a33990 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6a556e81be84aae88c13cf8a8e148247 = $(`<div id="html_6a556e81be84aae88c13cf8a8e148247" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_274a00088f126a594ef1c34e43a33990.setContent(html_6a556e81be84aae88c13cf8a8e148247);
+            
+        
+
+        marker_36e4b20cf9fa5fd13621656e9304d518.bindPopup(popup_274a00088f126a594ef1c34e43a33990)
+        ;
+
+        
+    
+    
+                marker_36e4b20cf9fa5fd13621656e9304d518.setIcon(icon_dd6c567cd9491fff056178203a7c0f8e);
+            
+    
+            var marker_d0a8422c25d3985340faf05a78950e4a = L.marker(
+                [13.000069045681066, 77.57432671781135],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_3a0d2086acfbbcc1957303535f8285c5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_eceddfe4b01185bd053873ff8009e080 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ae86fbe31cab86db894efa11a6dff12f = $(`<div id="html_ae86fbe31cab86db894efa11a6dff12f" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_eceddfe4b01185bd053873ff8009e080.setContent(html_ae86fbe31cab86db894efa11a6dff12f);
+            
+        
+
+        marker_d0a8422c25d3985340faf05a78950e4a.bindPopup(popup_eceddfe4b01185bd053873ff8009e080)
+        ;
+
+        
+    
+    
+                marker_d0a8422c25d3985340faf05a78950e4a.setIcon(icon_3a0d2086acfbbcc1957303535f8285c5);
+            
+    
+            var marker_4edd23983972c8db25dc2dd866af2606 = L.marker(
+                [13.035162299438143, 77.63055312280524],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_cbcaa0ccb835132dbf26272205bba2c0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_86e3d0df8a0c63b65b1d5f4f7bc9edef = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ec8034344823dcb401eb95e1180c4e7e = $(`<div id="html_ec8034344823dcb401eb95e1180c4e7e" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_86e3d0df8a0c63b65b1d5f4f7bc9edef.setContent(html_ec8034344823dcb401eb95e1180c4e7e);
+            
+        
+
+        marker_4edd23983972c8db25dc2dd866af2606.bindPopup(popup_86e3d0df8a0c63b65b1d5f4f7bc9edef)
+        ;
+
+        
+    
+    
+                marker_4edd23983972c8db25dc2dd866af2606.setIcon(icon_cbcaa0ccb835132dbf26272205bba2c0);
+            
+    
+            var marker_96d588e0e64ffd204355ca68414d05b2 = L.marker(
+                [12.97351067474201, 77.54949995792248],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_45bc52a7c991be1d5e535280109454b6 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d6a214412c5b4736bd5af0322f2e1e53 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b79b49ec18c5abc70c2aa4ff51b41065 = $(`<div id="html_b79b49ec18c5abc70c2aa4ff51b41065" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_d6a214412c5b4736bd5af0322f2e1e53.setContent(html_b79b49ec18c5abc70c2aa4ff51b41065);
+            
+        
+
+        marker_96d588e0e64ffd204355ca68414d05b2.bindPopup(popup_d6a214412c5b4736bd5af0322f2e1e53)
+        ;
+
+        
+    
+    
+                marker_96d588e0e64ffd204355ca68414d05b2.setIcon(icon_45bc52a7c991be1d5e535280109454b6);
+            
+    
+            var marker_eaef5e8b1d02a74c62be43920487c593 = L.marker(
+                [13.006030816774063, 77.74359148395483],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_af056e6f6459fa09c387d904e84f32ff = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1d98124c5a836349034d5e62c108780c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7cb29225f6a5e6cd505e568540e6cef2 = $(`<div id="html_7cb29225f6a5e6cd505e568540e6cef2" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_1d98124c5a836349034d5e62c108780c.setContent(html_7cb29225f6a5e6cd505e568540e6cef2);
+            
+        
+
+        marker_eaef5e8b1d02a74c62be43920487c593.bindPopup(popup_1d98124c5a836349034d5e62c108780c)
+        ;
+
+        
+    
+    
+                marker_eaef5e8b1d02a74c62be43920487c593.setIcon(icon_af056e6f6459fa09c387d904e84f32ff);
+            
+    
+            var marker_22b7d262f24f7f44c6e1e8be275e7973 = L.marker(
+                [12.884505820668167, 77.56927465553368],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_b2bf187f8ce12f41e3b23aabfb6ad435 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1ff0244b367241b1943df77d2b824e64 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_fb7558b10671ebef886202bd9f86e74e = $(`<div id="html_fb7558b10671ebef886202bd9f86e74e" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_1ff0244b367241b1943df77d2b824e64.setContent(html_fb7558b10671ebef886202bd9f86e74e);
+            
+        
+
+        marker_22b7d262f24f7f44c6e1e8be275e7973.bindPopup(popup_1ff0244b367241b1943df77d2b824e64)
+        ;
+
+        
+    
+    
+                marker_22b7d262f24f7f44c6e1e8be275e7973.setIcon(icon_b2bf187f8ce12f41e3b23aabfb6ad435);
+            
+    
+            var marker_a53107919f69b7cf21804f84a3e53e44 = L.marker(
+                [12.908509050240538, 77.68246953173937],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_5c206babedbaa58f1103a88ed874eba9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0020f8e8b15dec0230b9ed90b9dfd7a4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e7fe6639274a26d88f6be7fdfd059029 = $(`<div id="html_e7fe6639274a26d88f6be7fdfd059029" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_0020f8e8b15dec0230b9ed90b9dfd7a4.setContent(html_e7fe6639274a26d88f6be7fdfd059029);
+            
+        
+
+        marker_a53107919f69b7cf21804f84a3e53e44.bindPopup(popup_0020f8e8b15dec0230b9ed90b9dfd7a4)
+        ;
+
+        
+    
+    
+                marker_a53107919f69b7cf21804f84a3e53e44.setIcon(icon_5c206babedbaa58f1103a88ed874eba9);
+            
+    
+            var marker_c3156ed1fff399cbe92d8b34b614fafc = L.marker(
+                [12.9343638553098, 77.61546127861754],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_40146de879830fb5bc5fa267a6b4d9cb = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_20ff827c79362606d647c0e0d0bf6b42 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_51fa20151e09e6a5a6c5327bc61a1237 = $(`<div id="html_51fa20151e09e6a5a6c5327bc61a1237" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_20ff827c79362606d647c0e0d0bf6b42.setContent(html_51fa20151e09e6a5a6c5327bc61a1237);
+            
+        
+
+        marker_c3156ed1fff399cbe92d8b34b614fafc.bindPopup(popup_20ff827c79362606d647c0e0d0bf6b42)
+        ;
+
+        
+    
+    
+                marker_c3156ed1fff399cbe92d8b34b614fafc.setIcon(icon_40146de879830fb5bc5fa267a6b4d9cb);
+            
+    
+            var marker_1b3ca78540f1a03b239828a919922686 = L.marker(
+                [12.968338156965551, 77.52789530080331],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_aad34825be561e146ee4a61729ad1f07 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8dc777038f2202f6c57f446ab227473e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_132308e25d634753166b585290118291 = $(`<div id="html_132308e25d634753166b585290118291" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_8dc777038f2202f6c57f446ab227473e.setContent(html_132308e25d634753166b585290118291);
+            
+        
+
+        marker_1b3ca78540f1a03b239828a919922686.bindPopup(popup_8dc777038f2202f6c57f446ab227473e)
+        ;
+
+        
+    
+    
+                marker_1b3ca78540f1a03b239828a919922686.setIcon(icon_aad34825be561e146ee4a61729ad1f07);
+            
+    
+            var marker_d14f711b2f3e698866e265396d598bf5 = L.marker(
+                [13.006181465286563, 77.54973328827658],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_fd3f87523481bb42d22dc39e82f4f9ce = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c7e8540a7d6724e7bbe06e937cd57658 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9441cc6665e444c5800bea03e4faf289 = $(`<div id="html_9441cc6665e444c5800bea03e4faf289" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_c7e8540a7d6724e7bbe06e937cd57658.setContent(html_9441cc6665e444c5800bea03e4faf289);
+            
+        
+
+        marker_d14f711b2f3e698866e265396d598bf5.bindPopup(popup_c7e8540a7d6724e7bbe06e937cd57658)
+        ;
+
+        
+    
+    
+                marker_d14f711b2f3e698866e265396d598bf5.setIcon(icon_fd3f87523481bb42d22dc39e82f4f9ce);
+            
+    
+            var marker_01b707e7eed93e5f96a6c9d38d323ce2 = L.marker(
+                [12.84285939828416, 77.64757933442753],
+                {
+}
+            ).addTo(map_d88f7148beeb9650a9b1c330a7d6bfcf);
+        
+    
+            var icon_11433505b0dd3fa6dd4742c90f102a52 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_671ae6684bd0f5a6cdff88bbfa2bea29 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0207111a676ac54f1627e1d51029d8b0 = $(`<div id="html_0207111a676ac54f1627e1d51029d8b0" style="width: 100.0%; height: 100.0%;">Parking Hotspot</div>`)[0];
+                popup_671ae6684bd0f5a6cdff88bbfa2bea29.setContent(html_0207111a676ac54f1627e1d51029d8b0);
+            
+        
+
+        marker_01b707e7eed93e5f96a6c9d38d323ce2.bindPopup(popup_671ae6684bd0f5a6cdff88bbfa2bea29)
+        ;
+
+        
+    
+    
+                marker_01b707e7eed93e5f96a6c9d38d323ce2.setIcon(icon_11433505b0dd3fa6dd4742c90f102a52);
+            
+</script>
+</html>
