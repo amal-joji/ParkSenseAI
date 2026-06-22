@@ -72,41 +72,45 @@ explainer = shap.TreeExplainer(model)
 
 
 # =======================
-# LOAD DATA
+# LOAD DATA (OPTIMIZED WITH CACHING)
 # =======================
 
-df = pd.read_csv(
-    "parking_clustered.csv"
-)
+@st.cache_data
+def load_and_process_data():
+    # Read the data once and save it in memory cache
+    data = pd.read_csv("parking_clustered.csv")
+    
+    data['created_datetime'] = pd.to_datetime(
+        data['created_datetime'],
+        format='mixed',
+        errors='coerce'
+    )
+    
+    data['hour'] = data['created_datetime'].dt.hour
+    data['month'] = data['created_datetime'].dt.month
+    
+    from sklearn.cluster import MiniBatchKMeans
+    coords_df = data[['latitude','longitude']].dropna()
+    
+    kmeans_obj = MiniBatchKMeans(
+        n_clusters=30,
+        random_state=42,
+        batch_size=10000
+    )
+    
+    data.loc[coords_df.index, 'cluster'] = kmeans_obj.fit_predict(coords_df)
+    data['cluster'] = data['cluster'].astype(int)
+    
+    # Clean string objects
+    data['location'] = data['location'].fillna('Unknown').astype(str)
+    data['vehicle_type'] = data['vehicle_type'].fillna('Unknown').astype(str)
+    data['junction_name'] = data['junction_name'].fillna('Unknown').astype(str)
+    data['police_station'] = data['police_station'].fillna('Unknown').astype(str)
+    
+    return data
 
-df['created_datetime'] = pd.to_datetime(
-    df['created_datetime'],
-    format='mixed',
-    errors='coerce'
-)
-
-df['hour'] = df['created_datetime'].dt.hour
-df['month'] = df['created_datetime'].dt.month
-from sklearn.cluster import MiniBatchKMeans
-
-coords = df[['latitude','longitude']].dropna()
-
-kmeans = MiniBatchKMeans(
-    n_clusters=30,
-    random_state=42,
-    batch_size=10000
-)
-
-df.loc[coords.index, 'cluster'] = kmeans.fit_predict(coords)
-
-df['cluster'] = df['cluster'].astype(int)
-
-# Fill missing values
-
-df['location'] = df['location'].fillna('Unknown').astype(str)
-df['vehicle_type'] = df['vehicle_type'].fillna('Unknown').astype(str)
-df['junction_name'] = df['junction_name'].fillna('Unknown').astype(str)
-df['police_station'] = df['police_station'].fillna('Unknown').astype(str)
+# Call the cached function to populate your global dataframe
+df = load_and_process_data()
 
 
 # =======================
@@ -131,6 +135,8 @@ recommendations = recommendations.sort_values(
 # 1. LANGUAGE CONFIGURATION
 if 'lang' not in st.session_state:
     st.session_state['lang'] = 'en' # Default to English
+if 'selected_station' not in st.session_state:
+    st.session_state['selected_station'] = 'All Bengaluru'
 
 def toggle_language():
     if st.session_state['lang'] == 'en':
@@ -153,6 +159,10 @@ TEXT = {
         'menu_explain': 'Explainability',
         'menu_recommendations': 'Recommendations',
         'menu_alerts': 'Alerts',
+        'metric_peak_hour': '⚡ Peak Risk Hour',
+        'dashboard_map_title': '🌐 Live Spatial Jurisdiction Vector',
+        'metric_revenue': '💰 Projected Fine Recovery',
+        'alerts_title': '⚠️ Live Congestion Chokepoints',
         
         # --- Dashboard Metrics & Charts ---
         'metric_violations': '🚨 Violations',
@@ -178,6 +188,7 @@ TEXT = {
         'feature_title': '📈 Feature Importance',
         'explain_title': '🔍 SHAP Explainability',
         'alerts_title': '🚨 Critical Alerts Dashboard',
+        'analytics_chart_title': 'Violation Telemetry',
 
         'footer_subtitle': 'Mercedes AMG Telemetry Inspired Dashboard',
         'footer_tech': 'XGBoost • SHAP • KMeans • Folium • Streamlit',
@@ -195,6 +206,10 @@ TEXT = {
         'menu_explain': 'ವಿವರಿಸುವಿಕೆ',
         'menu_recommendations': 'ಶಿಫಾರಸುಗಳು',
         'menu_alerts': 'ಎಚ್ಚರಿಕೆಗಳು',
+        'metric_peak_hour': '⚡ ಗರಿಷ್ಠ ದಟ್ಟಣೆ ಸಮಯ',
+        'dashboard_map_title': '🌐 ಲೈವ್ ಪ್ರಾದೇಶಿಕ ನಕ್ಷೆ',
+        'metric_revenue': '💰 ಅಂದಾಜು ದಂಡ ವಸೂಲಿ',
+        'alerts_title': '⚠️ ಲೈವ್ ಸಂಚಾರ ದಟ್ಟಣೆ ಕೇಂದ್ರಗಳು',
         
         # --- Dashboard Metrics & Charts ---
         'metric_violations': '🚨 ಉಲ್ಲಂಘನೆಗಳು',
@@ -220,6 +235,7 @@ TEXT = {
         'feature_title': '📈 ವೈಶಿಷ್ಟ್ಯದ ಪ್ರಾಮುಖ್ಯತೆ',
         'explain_title': '🔍 SHAP ವಿವರಿಸುವಿಕೆ',
         'alerts_title': '🚨 ನಿರ್ಣಾಯಕ ಎಚ್ಚರಿಕೆಗಳ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
+        'analytics_chart_title': 'ಉಲ್ಲಂಘನೆ ಟೆಲಿಮೆಟ್ರಿ',
 
         'footer_subtitle': 'ಮರ್ಸಿಡಿಸ್ ಎಎಂಜಿ ಟೆಲಿಮೆಟ್ರಿ ಪ್ರೇರಿತ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
         'footer_tech': 'XGBoost • SHAP • KMeans • Folium • Streamlit',
@@ -315,7 +331,7 @@ selected = option_menu(
 )
 
 
-    # ======================================================
+# ======================================================
 # DASHBOARD
 # ======================================================
 
@@ -332,129 +348,160 @@ if selected == TEXT[lang]['menu_dashboard']:
         unsafe_allow_html=True
     )
 
-    col1,col2,col3,col4 = st.columns(4)
+    st.markdown("---")
+
+    # 1. INTERACTIVE FILTER: Bound cleanly to global session state
+    station_options = ["All Bengaluru"] + sorted(list(df['police_station'].dropna().unique()))
+    
+    # Track the current state's array index to prevent visual resetting on click
+    try:
+        current_index = station_options.index(st.session_state['selected_station'])
+    except ValueError:
+        current_index = 0
+
+    selected_station = st.selectbox(
+        "🔍 Filter Dashboard by Police Jurisdiction / ಪೊಲೀಸ್ ಠಾಣೆ", 
+        options=station_options,
+        index=current_index
+    )
+    
+    # Save the choice globally across tabs
+    st.session_state['selected_station'] = selected_station
+
+    # 2. DATA FILTERING LOGIC
+    if st.session_state['selected_station'] != "All Bengaluru":
+        dashboard_df = df[df['police_station'] == st.session_state['selected_station']]
+    else:
+        dashboard_df = df
+
+    # 3. SUGGESTION 3 CALCULATION: Calculate Peak Enforcement Hours dynamically
+    if len(dashboard_df) > 0:
+        peak_hour_raw = dashboard_df['hour'].mode()[0]
+        # Format the hour nicely to a 12-hour AM/PM string representation
+        peak_hour_str = f"{peak_hour_raw}:00 AM" if peak_hour_raw < 12 else f"{peak_hour_raw-12 if peak_hour_raw > 12 else 12}:00 PM"
+    else:
+        peak_hour_str = "N/A"
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # 4. METRIC CARDS (Now showing the Peak Risk Hour instead of redundant station counts)
+    col1, col2, col3, col4, col5 = st.columns(5)
 
     with col1:
-        st.metric(TEXT[lang]['metric_violations'], f"{len(df):,}")
+        st.metric(TEXT[lang]['metric_violations'], f"{len(dashboard_df):,}")
 
     with col2:
-
         st.metric(
             TEXT[lang]['metric_locations'],
-            df['location'].nunique()
+            dashboard_df['location'].nunique()
         )
 
     with col3:
-
-        st.metric(
-            TEXT[lang]['metric_stations'],
-            df['police_station'].nunique()
-        )
+        # IMPLEMENTED SUGGESTION 3: Replaced redundant station counter with live peak hour text
+        st.metric(TEXT[lang]['metric_peak_hour'], peak_hour_str)
 
     with col4:
-
         st.metric(
             TEXT[lang]['metric_hotspots'],
-            df['cluster'].nunique()
+            dashboard_df['cluster'].nunique()
         )
-
-
+    with col5:
+        # NEW: Compute dynamic financial forecasting based on ₹500 base fine rate
+        projected_revenue = len(dashboard_df) * 500
+        st.metric(TEXT[lang]['metric_revenue'], f"₹{projected_revenue:,}")
 
     st.markdown("---")
 
-    col1,col2 = st.columns([1,1])
+    col1, col2 = st.columns([1, 1])
     
-    # ======================
-    # CONGESTION GAUGE
-    # ======================
-
+    # 5. DYNAMIC CONGESTION GAUGE CALCULATION (Filtered by selection)
     with col1:
-
-        risk_score = 82
+        local_recs = dashboard_df.groupby('location').size().reset_index(name='violations')
+        avg_violations = local_recs['violations'].mean() if len(local_recs) > 0 else 0
+        critical_zones = local_recs[local_recs['violations'] > (avg_violations * 1.5)] if avg_violations > 0 else []
+        
+        if len(local_recs) > 0:
+            calculated_score = (len(critical_zones) / len(local_recs)) * 100
+            risk_score = min(100, max(15, int(calculated_score * 4)))  
+        else:
+            risk_score = 0
 
         fig = go.Figure(
             go.Indicator(
-
                 mode="gauge+number",
-
                 value=risk_score,
-
                 title={'text': TEXT[lang]['gauge_title']},
-
                 gauge={
-
-                    'axis':{'range':[0,100]},
-
-                    'bar':{'color':'cyan'},
-
-                    'steps':[
-
-                        {'range':[0,40],'color':'green'},
-
-                        {'range':[40,70],'color':'orange'},
-
-                        {'range':[70,100],'color':'red'}
-
+                    'axis': {'range': [0, 100]},
+                    'bar': {'color': 'cyan'},
+                    'steps': [
+                        {'range': [0, 40], 'color': 'green'},
+                        {'range': [40, 70], 'color': 'orange'},
+                        {'range': [70, 100], 'color': 'red'}
                     ]
-
                 }
-
             )
         )
 
         fig.update_layout(
             template='plotly_dark',
             paper_bgcolor='#0B0F19',
-            font_color='white'
+            font_color='white',
+            margin=dict(t=40, b=10, l=30, r=30)
         )
 
-        st.plotly_chart(
-            fig,
-            use_container_width=True
-        )
+        st.plotly_chart(fig, use_container_width=True)
 
 
-    # ======================
-    # TOP HOTSPOTS
-    # ======================
-
+    # 6. DYNAMIC BAR CHART
     with col2:
-
         top_locations = (
-            df.groupby('location')
+            dashboard_df.groupby('location')
             .size()
             .sort_values(ascending=False)
             .head(10)
         )
 
         fig2 = px.bar(
-
             x=top_locations.values,
-
             y=top_locations.index,
-
             orientation='h',
-
             labels={
-                'x':'Violations',
-                'y':'Location'
+                'x': 'Violations',
+                'y': 'Location'
             },
-
-            title=TEXT[lang]['bar_title']
+            title=f"{TEXT[lang]['bar_title']} ({selected_station})"
         )
 
         fig2.update_layout(
             template='plotly_dark',
             paper_bgcolor='#0B0F19',
-            plot_bgcolor='#0B0F19'
+            plot_bgcolor='#0B0F19',
+            yaxis={'autorange': 'reversed'} 
         )
 
-        st.plotly_chart(
-            fig2,
-            use_container_width=True
-        )
+        st.plotly_chart(fig2, use_container_width=True)
 
+    # 7. IMPLEMENTED SUGGESTION 2: Live Heatmap Preview below the main data charts
+    st.markdown("---")
+    st.markdown(f"### {TEXT[lang]['dashboard_map_title']}")
 
+    # Compute dynamic geographical coordinate focal centers based on filtered data
+    if len(dashboard_df) > 0:
+        center = [dashboard_df['latitude'].mean(), dashboard_df['longitude'].mean()]
+        zoom_level = 13 if selected_station != "All Bengaluru" else 11
+    else:
+        center = [12.9716, 77.5946] # Fallback default center for Bengaluru
+        zoom_level = 11
+
+    # Render an interactive, beautifully synced spatial heatmap preview canvas
+    m_mini = folium.Map(location=center, zoom_start=zoom_level, tiles="cartodbpositron")
+
+    heat_data_mini = dashboard_df[['latitude', 'longitude']].dropna().values.tolist()
+    if heat_data_mini:
+        HeatMap(heat_data_mini, radius=8, blur=12).add_to(m_mini)
+
+    st_folium(m_mini, width=1400, height=350, key="dashboard_map_preview")
 
 # ======================================================
 # PREDICTION PAGE
@@ -464,105 +511,62 @@ elif selected == TEXT[lang]['menu_prediction']:
 
     st.title(TEXT[lang]['app_title'])
 
-    col1,col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
     with col1:
+        # 1. READ GLOBAL FILTER STATE: Check if a station was already selected on the dashboard
+        active_station = st.session_state.get('selected_station', 'All Bengaluru')
+        
+        station_options = sorted(list(df['police_station'].dropna().astype(str).unique()))
+        
+        # Determine the correct pre-selection index for the selectbox
+        if active_station in station_options:
+            default_station_idx = station_options.index(active_station)
+        else:
+            default_station_idx = 0 # Fallback to first option if "All Bengaluru" is active
 
-        vehicle = st.selectbox(
-
-            TEXT[lang]['vehicle_type'],
-
-            sorted(
-                df['vehicle_type']
-                .dropna()
-                .astype(str)
-                .unique()
-            )
-
+        # Police Station acts as the master controller dropdown
+        station = st.selectbox(
+            TEXT[lang]['police_station'],
+            options=station_options,
+            index=default_station_idx
         )
 
+        # 2. DYNAMIC GEOGRAPHIC FILTERING: Extract rows belonging strictly to this station
+        prediction_filtered_df = df[df['police_station'] == station]
 
-
+        # 3. BOUND DROPDOWNS: Populate options strictly from the filtered slice
         location = st.selectbox(
-
             TEXT[lang]['location'],
-
-            sorted(
-                df['location']
-                .dropna()
-                .astype(str)
-                .unique()
-            )
-
+            options=sorted(prediction_filtered_df['location'].dropna().astype(str).unique())
         )
-
-
 
         junction = st.selectbox(
-
             TEXT[lang]['junction'],
-
-            sorted(
-                df['junction_name']
-                .dropna()
-                .astype(str)
-                .unique()
-            )
-
+            options=sorted(prediction_filtered_df['junction_name'].dropna().astype(str).unique())
         )
 
-
-
-        station = st.selectbox(
-
-            TEXT[lang]['police_station'],
-
-            sorted(
-                df['police_station']
-                .dropna()
-                .astype(str)
-                .unique()
-            )
-
+        vehicle = st.selectbox(
+            TEXT[lang]['vehicle_type'],
+            options=sorted(prediction_filtered_df['vehicle_type'].dropna().astype(str).unique())
         )
-
-
 
         hour = st.slider(
-
             TEXT[lang]['hour'],
-
-            0,
-
-            23,
-
-            10
-
+            0, 23, 10
         )
-
 
         month = st.slider(
-
             TEXT[lang]['month'],
-
-            1,
-
-            12,
-
-            3
-
+            1, 12, 3
         )
-
-
 
     with col2:
-
         st.image(
-            "https://cdn-icons-png.flaticon.com/512/3202/3202926.png",
+            "image.png",
             width=250
         )
-
-
+    
 
     if st.button(TEXT[lang]['predict_btn']):
 
@@ -614,42 +618,51 @@ elif selected == TEXT[lang]['menu_prediction']:
         )
 
 
+        # Get the probabilities for [Low, Medium, High]
+        probabilities = model.predict_proba(input_data)[0]
+        low_prob, med_prob, high_prob = probabilities[0], probabilities[1], probabilities[2]
+
+        # Get the standard prediction code (0, 1, or 2)
         prediction = model.predict(input_data)[0]
 
-
-        if prediction == "High":
-            color = "#FF0000"
+        # Determine base parameters and localized status subheadings
+        if prediction == 2: # High Risk
+            color = "#FF3366" # Premium neon crimson
             risk = "🔴 HIGH RISK"
-            officers = 3
-        elif prediction == "Medium":
-            color = "#FFA500"
+            officers = int(high_prob * 5) + 3 
+            status_text = "CRITICAL ACTION REQUIRED / ಗರಿಷ್ಠ ಅಪಾಯ"
+            bg_glow = "rgba(255, 51, 102, 0.2)"
+        elif prediction == 1: # Medium Risk
+            color = "#FFA500" # Safety neon amber
             risk = "🟠 MEDIUM RISK"
-            officers = 2
-        else:
-            color = "#00cc66"
+            officers = int(med_prob * 2) + 1 
+            status_text = "MODERATE MONITORING REQUIRED / ಮಧ್ಯಮ ಅಪಾಯ"
+            bg_glow = "rgba(255, 165, 0, 0.2)"
+        else: # Low Risk
+            color = "#00FF66" # Premium neon emerald
             risk = "🟢 LOW RISK"
             officers = 1
+            status_text = "NORMAL COMPLIANCE DETECTED / ಕಡಿಮೆ ಅಪಾಯ"
+            bg_glow = "rgba(0, 255, 102, 0.15)"
 
-        st.markdown(
-            f"""
-            <div style="
-            background:rgba(20,27,45,0.85);
-            border:2px solid {color};
-            border-radius:25px;
-            padding:40px;
-            box-shadow:0 0 30px {color};
-            text-align:center;
-            ">
-
-            <h1 style="color:{color};">{risk}</h1>
-
-            <h2 style="color:white;">
-            🚔 Deploy {officers} Officer
-            </h2>
-            </div>
-            """,
-            unsafe_allow_html=True
+        # FIXED: Built using clean continuous string concatenation to avoid markdown indentation errors
+        prediction_card = (
+            f'<div style="background: rgba(15, 22, 38, 0.95); padding: 35px; border: 2px solid {color}; '
+            f'border-radius: 20px; box-shadow: 0 0 25px {bg_glow}; text-align: center; margin-top: 25px; width: 100%;">'
+            f'<span style="color: #aaaaaa; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">'
+            f'AI Risk Engine Evaluation Matrix</span>'
+            f'<h1 style="color: white; margin: 15px 0 5px 0; font-weight: 800; font-size: 32px;">'
+            f'{risk} <span style="font-size: 22px; color: #aaaaaa; font-weight: 400;">({max(probabilities)*100:.1f}%)</span>'
+            f'</h1>'
+            f'<p style="color: {color}; margin: 0 0 20px 0; font-size: 15px; font-weight: bold; letter-spacing: 0.5px;">⚠️ {status_text}</p>'
+            f'<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">'
+            f'<h2 style="color: white; margin: 0; font-size: 24px; font-weight: 700;">'
+            f'🚔 Recommended Deployment: <span style="color: {color};">{officers} Officer(s)</span>'
+            f'</h2>'
+            f'</div>'
         )
+        
+        st.markdown(prediction_card, unsafe_allow_html=True)
 
 elif selected == TEXT[lang]['menu_analytics']:
     hourly = df.groupby(
@@ -688,7 +701,7 @@ elif selected == TEXT[lang]['menu_analytics']:
 
     font_color='white',
 
-    title='Violation Telemetry'
+    title=TEXT[lang]['analytics_chart_title']
 
     )
 
@@ -780,158 +793,228 @@ elif selected == TEXT[lang]['menu_heatmap']:
 
 elif selected == TEXT[lang]['menu_recommendations']:
 
-    st.title(TEXT[lang]['recommendations_title'])
+    # Retrieve the global filter setting from session state
+    active_station = st.session_state.get('selected_station', 'All Bengaluru')
 
-    for _, row in recommendations.head(10).iterrows():
+    # Update the title dynamically based on selection scope
+    st.title(f"{TEXT[lang]['recommendations_title']} ({active_station})")
 
-        st.markdown(
-        f"""
-        <div style="
-        background:rgba(20,27,45,0.85);
-        padding:20px;
-        border-left:7px solid #00E5FF;
-        border-radius:20px;
-        margin-bottom:15px;
-        box-shadow:0 0 15px rgba(0,229,255,0.2);
-        ">
+    # Re-compile recommendations strictly for this active jurisdiction scope
+    if active_station != "All Bengaluru":
+        filtered_rec_df = df[df['police_station'] == active_station]
+    else:
+        filtered_rec_df = df
 
-        <h3>📍 {row['location']}</h3>
+    local_recommendations = (
+        filtered_rec_df.groupby('location')
+        .size()
+        .reset_index(name='violations')
+    )
+    local_recommendations['officers_required'] = (local_recommendations['violations'] // 20) + 1
+    local_recommendations = local_recommendations.sort_values('violations', ascending=False)
 
-        <p style="font-size:18px;">
-        🚨 Violations : {row['violations']}
-        </p>
+    # Prepare the CSV data payload based on the dynamically compiled table view
+    csv_data = local_recommendations.head(10).to_csv(index=False).encode('utf-8')
 
-        <p style="font-size:18px;">
-        🚔 Officers Required : {row['officers_required']}
-        </p>
+    # Download Button
+    st.download_button(
+        label=f"📥 Export Deployment Schedule for {active_station} (CSV)",
+        data=csv_data,
+        file_name=f"deployment_schedule_{active_station.lower().replace(' ', '_')}.csv",
+        mime="text/csv",
+        use_container_width=True
+    )
 
-        </div>
-        """,
-        unsafe_allow_html=True
-        )
+    st.markdown("<br>", unsafe_allow_html=True)
+
+# Render cards in a perfectly stable, un-squishable single horizontal line per entry
+    if len(local_recommendations) > 0:
+        for _, row in local_recommendations.head(10).iterrows():
+            # FIXED: Built as a continuous string with zero leading whitespace blocks to bypass Markdown code rules
+            html_card = (
+                f'<div style="display: flex; justify-content: space-between; align-items: center; '
+                f'background: rgba(20,27,45,0.85); padding: 18px 30px; border-left: 7px solid #00E5FF; '
+                f'border-radius: 16px; margin-bottom: 12px; box-shadow: 0 0 15px rgba(0,229,255,0.15); width: 100%;">'
+                f'<div style="flex: 1; min-width: 0; padding-right: 20px;">'
+                f'<h4 style="margin: 0; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="📍 {row["location"]}">'
+                f'📍 {row["location"]}'
+                f'</h4>'
+                f'</div>'
+                f'<div style="flex-shrink: 0; padding: 0 20px; white-space: nowrap; text-align: center;">'
+                f'<span style="color: #aaaaaa; font-size: 16px;">🚨 Violations:</span>'
+                f'<b style="color: white; font-size: 18px; margin-left: 5px;">{row["violations"]}</b>'
+                f'</div>'
+                f'<div style="flex-shrink: 0; padding-left: 20px; white-space: nowrap; text-align: right;">'
+                f'<span style="color: #00E5FF; font-size: 16px;">Automated Deployment:</span>'
+                f'<b style="color: #00E5FF; font-size: 18px; margin-left: 5px;">{row["officers_required"]} Officers</b>'
+                f'</div>'
+                f'</div>'
+            )
+            
+            st.markdown(html_card, unsafe_allow_html=True)
+    else:
+        st.info("No active parking violations data captured within this precinct zone.")
+
 
 elif selected == TEXT[lang]['menu_feature']:
 
     st.title(TEXT[lang]['feature_title'])
 
+    # Get the raw importance scores from the model
     importance = model.feature_importances_
+    features = ['vehicle_type', 'location', 'junction_name', 'police_station', 'hour', 'month']
 
-    features = model.feature_names_in_
+    # Apply sleek dark mode styling to the Matplotlib canvas
+    plt.style.use('dark_background')
+    
+    # Expanded layout width to give features maximum horizontal breathing room
+    fig, ax = plt.subplots(figsize=(12, 5))
+    
+    fig.patch.set_facecolor('#0B0F19')
+    ax.set_facecolor('#0B0F19')
 
-    fig, ax = plt.subplots(figsize=(10,6))
+    # Draw the horizontal bars using your theme's cyan color
+    ax.barh(features, importance, color='#00E5FF', height=0.5)
 
-    ax.barh(
-        features,
-        importance
-    )
+    ax.set_xlabel("Importance Weight", color='white', fontsize=12, labelpad=10)
+    ax.set_title("XGBoost Feature Importance Telemetry", color='#00E5FF', fontsize=15, fontweight='bold', pad=20)
+    
+    # Adjust feature y-axis labels size to ensure clean single-line reading
+    ax.tick_params(axis='y', labelsize=12, colors='white')
+    ax.tick_params(axis='x', colors='white')
+    
+    # Clean up the chart borders
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_color((1.0, 1.0, 1.0, 0.2))
+    ax.spines['bottom'].set_color((1.0, 1.0, 1.0, 0.2))
 
-    ax.set_xlabel("Importance")
-
-    ax.set_title("XGBoost Feature Importance")
+    # CRITICAL FORCE: Tells Matplotlib to cleanly space margins out to fit all text elements on one line
+    plt.tight_layout()
 
     st.pyplot(fig)
 
 elif selected == TEXT[lang]['menu_explain']:
 
-    st.title(TEXT[lang]['explain_title'])
+    # 1. Retrieve the global filter setting from session state
+    active_station = st.session_state.get('selected_station', 'All Bengaluru')
 
-    sample = df[
-    [
-        'vehicle_type',
-        'location',
-        'junction_name',
-        'police_station',
-        'hour',
-        'month'
-    ]
-    ].dropna().copy()
+    st.title(f"🔍 SHAP Explainability Engine ({active_station})")
 
-    cat_cols = [
-        'vehicle_type',
-        'location',
-        'junction_name',
-        'police_station'
-    ]
+    # 2. DYNAMIC DATA SLICE: Filter the matrix before passing it to the explainer
+    if active_station != "All Bengaluru":
+        explain_filtered_df = df[df['police_station'] == active_station]
+    else:
+        explain_filtered_df = df
 
-    for col in cat_cols:
+    # Prepare features matching the original training structure
+    X_explain = explain_filtered_df[['vehicle_type', 'location', 'junction_name', 'police_station', 'hour', 'month']]
 
-        sample = sample[
-            sample[col].astype(str).isin(encoders[col].classes_)
-        ]
+    # 3. SAFE SAMPLING: Handle scenarios where a precinct has fewer rows than the standard sample size
+    sample_size = min(100, len(X_explain))
+    
+    if sample_size > 0:
+        # Pull a clean random sample strictly from the active jurisdiction scope
+        sample_shap = X_explain.sample(n=sample_size, random_state=42)
+        
+        # 4. ENCODER TRACKING: Gracefully intercept and neutralize any 'Unknown' or unseen labels
+        for col in ['vehicle_type', 'location', 'junction_name', 'police_station']:
+            valid_classes = set(encoders[col].classes_)
+            
+            # Fall back to a recognized baseline class if 'Unknown' appears
+            sample_shap[col] = sample_shap[col].astype(str).apply(
+                lambda x: x if x in valid_classes else encoders[col].classes_[0]
+            )
+            
+            # Safe transform mapping execution
+            sample_shap[col] = encoders[col].transform(sample_shap[col])
 
-        sample[col] = encoders[col].transform(
-            sample[col].astype(str)
+        # 5. SHAP ENGINE CORRELATION MATRICES (Initializes and Runs Calculations)
+        explainer = shap.TreeExplainer(model)
+        shap_values = explainer.shap_values(sample_shap)  # <-- Restored calculation line!
+
+        # 6. VISUAL RENDERING: Match your AMG dark telemetry theme
+        plt.style.use('dark_background')
+        fig = plt.figure(figsize=(10, 6))
+        fig.patch.set_facecolor('#0B0F19')
+
+        shap.summary_plot(
+            shap_values,
+            sample_shap,
+            plot_type="bar",
+            show=False
         )
+        
+        # Customize chart boundaries and axes styling
+        ax = plt.gca()
+        ax.set_facecolor('#0B0F19')
+        ax.set_title(f"SHAP Feature Weight Impacts for {active_station}", color='#00E5FF', fontsize=14, fontweight='bold', pad=20)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
 
-    sample_shap = sample.sample(
-        min(500, len(sample)),
-        random_state=42
-    )
-
-    shap_values = explainer.shap_values(sample_shap)
-
-    plt.figure(figsize=(10,6))
-
-    shap.summary_plot(
-        shap_values,
-        sample_shap,
-        plot_type="bar",
-        show=False
-    )
-
-    st.pyplot(
-        plt.gcf(),
-        clear_figure=True
-    )
+        st.pyplot(plt.gcf(), clear_figure=True)
+    else:
+        st.info("Insufficient data elements captured within this precinct zone to generate an XAI breakdown matrix.")
 
 elif selected == TEXT[lang]['menu_alerts']:
 
-    st.title(TEXT[lang]['alerts_title'])
+    # 1. Retrieve the global filter setting from session state
+    active_station = st.session_state.get('selected_station', 'All Bengaluru')
 
-    top_locations = (
-        df.groupby('location')
+    # 2. Update the title dynamically based on selection scope
+    st.title(f"{TEXT[lang]['alerts_title']} ({active_station})")
+
+    # 3. Filter data slice dynamically based on selection
+    if active_station != "All Bengaluru":
+        filtered_alerts_df = df[df['police_station'] == active_station]
+    else:
+        filtered_alerts_df = df
+
+    # Group and extract the top 6 absolute worst bottlenecks in this zone
+    top_alerts = (
+        filtered_alerts_df.groupby('location')
         .size()
         .sort_values(ascending=False)
         .head(6)
     )
 
-    cols = st.columns(2)
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    for i, (loc, cnt) in enumerate(top_locations.items()):
-
-        with cols[i % 2]:
-
-            st.markdown(
-            f"""
-            <div style="
-            background:rgba(20,27,45,0.85);
-            border:2px solid red;
-            border-radius:25px;
-            padding:25px;
-            box-shadow:0 0 25px red;
-            margin-bottom:20px;
-            ">
-
-            <h2 style="color:red;">
-            ⚠ ALERT
-            </h2>
-
-            <h3>
-            📍 {loc}
-            </h3>
-
-            <h4>
-            🚨 {cnt} Violations
-            </h4>
-
-            <h4>
-            🚔 Deploy Extra Officers
-            </h4>
-
-            </div>
-            """,
-            unsafe_allow_html=True
+    # 4. Render alerts using a sleek, single-line horizontal Neon Red layout
+    if len(top_alerts) > 0:
+        for loc, count in top_alerts.items():
+            # Dynamic operational severity labeling based on count thresholds
+            severity_label = "CRITICAL CHOKEPOINT" if count > 40 else "HIGH CONGESTION"
+            
+            # Built as a clean continuous string to guarantee perfect markdown execution
+            html_alert = (
+                f'<div style="display: flex; justify-content: space-between; align-items: center; '
+                f'background: rgba(30, 16, 22, 0.85); padding: 18px 30px; border-left: 7px solid #FF3366; '
+                f'border-radius: 16px; margin-bottom: 12px; box-shadow: 0 0 15px rgba(255, 51, 102, 0.15); width: 100%;">'
+                
+                f''
+                f'<div style="flex: 1; min-width: 0; padding-right: 20px;">'
+                f'<h4 style="margin: 0; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="🚨 {loc}">'
+                f'🚨 {loc}'
+                f'</h4>'
+                f'</div>'
+                
+                f''
+                f'<div style="flex-shrink: 0; padding: 0 20px; white-space: nowrap; text-align: center;">'
+                f'<span style="color: #FF3366; font-size: 13px; font-weight: bold; letter-spacing: 1px;">⚠️ {severity_label}</span>'
+                f'</div>'
+                
+                f''
+                f'<div style="flex-shrink: 0; padding-left: 20px; white-space: nowrap; text-align: right;">'
+                f'<span style="color: #aaaaaa; font-size: 16px;">Active Infractions:</span>'
+                f'<b style="color: #FF3366; font-size: 18px; margin-left: 5px;">{count}</b>'
+                f'</div>'
+                f'</div>'
             )
+            
+            st.markdown(html_alert, unsafe_allow_html=True)
+    else:
+        st.info("No critical parking congestion alerts active within this jurisdiction.")
 
 st.markdown(
 f"""<div style='text-align: center; padding: 20px 10px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);'>
