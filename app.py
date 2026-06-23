@@ -112,7 +112,6 @@ def load_and_process_data():
 # Call the cached function to populate your global dataframe
 df = load_and_process_data()
 
-
 # =======================
 # RECOMMENDATIONS TABLE
 # =======================
@@ -144,7 +143,7 @@ def toggle_language():
     else:
         st.session_state['lang'] = 'en'
 
-# 2. TRANSLATION DICTIONARY
+
 # 2. TRANSLATION DICTIONARY (Master Version)
 TEXT = {
     'en': {
@@ -262,9 +261,6 @@ f"""
 unsafe_allow_html=True
 )
 
-# =======================
-# SIDEBAR
-# =======================
 # =======================
 # SIDEBAR
 # =======================
@@ -645,7 +641,7 @@ elif selected == TEXT[lang]['menu_prediction']:
             status_text = "NORMAL COMPLIANCE DETECTED / ಕಡಿಮೆ ಅಪಾಯ"
             bg_glow = "rgba(0, 255, 102, 0.15)"
 
-        # FIXED: Built using clean continuous string concatenation to avoid markdown indentation errors
+        #  Built using clean continuous string concatenation to avoid markdown indentation errors
         prediction_card = (
             f'<div style="background: rgba(15, 22, 38, 0.95); padding: 35px; border: 2px solid {color}; '
             f'border-radius: 20px; box-shadow: 0 0 25px {bg_glow}; text-align: center; margin-top: 25px; width: 100%;">'
@@ -799,38 +795,58 @@ elif selected == TEXT[lang]['menu_recommendations']:
     # Update the title dynamically based on selection scope
     st.title(f"{TEXT[lang]['recommendations_title']} ({active_station})")
 
-    # Re-compile recommendations strictly for this active jurisdiction scope
+    # 1. DYNAMIC RECALCULATION: Filter the data slice right before running the aggregation loop
     if active_station != "All Bengaluru":
         filtered_rec_df = df[df['police_station'] == active_station]
     else:
         filtered_rec_df = df
 
+    # Re-compile recommendations strictly for this active jurisdiction scope
     local_recommendations = (
         filtered_rec_df.groupby('location')
         .size()
         .reset_index(name='violations')
     )
-    local_recommendations['officers_required'] = (local_recommendations['violations'] // 20) + 1
     local_recommendations = local_recommendations.sort_values('violations', ascending=False)
 
-    # Prepare the CSV data payload based on the dynamically compiled table view
-    csv_data = local_recommendations.head(10).to_csv(index=False).encode('utf-8')
+    # 🌟 STEP 1: Define UI Slicing FIRST to keep the dashboard fast
+    if active_station == "All Bengaluru":
+        # Limit to top 15 for macro city view to prevent lag and look clean
+        cards_to_render = local_recommendations.head(15).copy()
+        st.caption("💡 Showing Top 15 city-wide critical zones. Select a specific precinct above to view all local areas.")
+    else:
+        # Show absolutely everything for a localized police station area
+        cards_to_render = local_recommendations.copy()
+        st.caption(f"📊 Showing All {len(local_recommendations)} identified deployment nodes within {active_station} jurisdiction.")
+
+    # 🌟 STEP 2: Pure Proportional Scaling Math (Intuitive, predictable, and matches your data perfectly)
+    if len(cards_to_render) > 0:
+        max_v = cards_to_render['violations'].max()
+        
+        # Maps the worst spot to 8 officers, and scales everything else down beautifully down to 1
+        cards_to_render['officers_required'] = cards_to_render['violations'].apply(
+            lambda x: max(1, min(8, int((x / max_v) * 7) + 1)) if max_v > 0 else 1
+        )
+    else:
+        cards_to_render['officers_required'] = []
+
+    # The CSV download exports the clean dataset
+    csv_data = cards_to_render.to_csv(index=False).encode('utf-8')
 
     # Download Button
     st.download_button(
-        label=f"📥 Export Deployment Schedule for {active_station} (CSV)",
+        label=f"📥 Download Complete Deployment Schedule for {active_station} (CSV)",
         data=csv_data,
-        file_name=f"deployment_schedule_{active_station.lower().replace(' ', '_')}.csv",
+        file_name=f"complete_deployment_schedule_{active_station.lower().replace(' ', '_')}.csv",
         mime="text/csv",
         use_container_width=True
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-# Render cards in a perfectly stable, un-squishable single horizontal line per entry
-    if len(local_recommendations) > 0:
-        for _, row in local_recommendations.head(10).iterrows():
-            # FIXED: Built as a continuous string with zero leading whitespace blocks to bypass Markdown code rules
+    # 2. Render cards from our dynamically adjusted, perfectly scaled slice
+    if len(cards_to_render) > 0:
+        for _, row in cards_to_render.iterrows():
             html_card = (
                 f'<div style="display: flex; justify-content: space-between; align-items: center; '
                 f'background: rgba(20,27,45,0.85); padding: 18px 30px; border-left: 7px solid #00E5FF; '
@@ -850,7 +866,6 @@ elif selected == TEXT[lang]['menu_recommendations']:
                 f'</div>'
                 f'</div>'
             )
-            
             st.markdown(html_card, unsafe_allow_html=True)
     else:
         st.info("No active parking violations data captured within this precinct zone.")
@@ -978,6 +993,44 @@ elif selected == TEXT[lang]['menu_alerts']:
         .head(6)
     )
 
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # 🌟 CRISIS MAP DISPLAY
+    import folium
+    from streamlit_folium import st_folium
+
+    # Extract full rows for the top 6 locations to get coordinates
+    map_alerts_df = filtered_alerts_df[filtered_alerts_df['location'].isin(top_alerts.index)].drop_duplicates('location')
+
+    if not map_alerts_df.empty:
+        # Compute map center dynamically based on active crises
+        center_lat = map_alerts_df['latitude'].mean()
+        center_lng = map_alerts_df['longitude'].mean()
+        
+        # Initialize a premium dark-mode map configuration
+        m = folium.Map(
+            location=[center_lat, center_lng], 
+            zoom_start=13, 
+            tiles="CartoDB dark_matter",
+            zoom_control=False,
+            scrollWheelZoom=False
+        )
+        
+        # Drop custom neon crimson markers for the top 6 hot spots
+        for _, row in map_alerts_df.iterrows():
+            loc_name = row['location']
+            total_infractions = top_alerts.get(loc_name, 0)
+            
+            folium.Marker(
+                location=[row['latitude'], row['longitude']],
+                popup=f"🚨 {loc_name} ({total_infractions} Infractions)",
+                tooltip=f"🚨 {loc_name}",
+                icon=folium.Icon(color='red', icon='info-sign')
+            ).add_to(m)
+            
+        # Render the map cleanly inside the app container
+        st_folium(m, width=None, height=350, returned_objects=[])
+    
     st.markdown("<br>", unsafe_allow_html=True)
 
     # 4. Render alerts using a sleek, single-line horizontal Neon Red layout
